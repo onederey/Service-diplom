@@ -1,4 +1,6 @@
+using CommonLib.Classes;
 using Data.ImportExportService;
+using ServiceExtensions.Extensions;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -8,9 +10,12 @@ IHost host = Host.CreateDefaultBuilder(args)
             .Build();
 
         services
+        .AddLogging()
         .AddOptions<TaskSettings>().Bind(config.GetSection(TaskSettings.Settings));
         
         services
+        .AddCommonWorker()
+        .AddTestWorker()
         .AddHostedService<Worker>();
 
     })

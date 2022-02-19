@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[ServiceTasks] (
 	[LastWorkTime]		DATETIME		NULL,
 	[TaskStartTime]		DATETIME		NOT NULL,
 	[TaskEndTime]		DATETIME		NOT NULL,
+	[Dependency]		NVARCHAR(100)	NOT NULL,
 	
 	[FilePath]			NVARCHAR(50)	NULL,
 	[FieldsCount]		INT				NULL,
@@ -16,3 +17,8 @@ CREATE TABLE [dbo].[ServiceTasks] (
 	[Description]		NVARCHAR(250)	NULL
 )
 GO
+
+
+
+INSERT INTO [dbo].[ServiceTasks] ([TaskID],[TaskType],[Branch],[TaskName],[LastWorkTime],[TaskStartTime],[TaskEndTime],[Dependency],[FilePath],[FieldsCount],[FieldsSeparator],[ModifiedBy],[AuthoriziedBy],[Description])
+VALUES(1, 1, 0, 'TestTask1', null, '2022-02-19 05:00:00', '2022-02-19 23:59:22', '', null, null, null, 'am', 'am', null)
