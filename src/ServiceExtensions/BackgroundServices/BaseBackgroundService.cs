@@ -51,8 +51,6 @@ namespace ServiceExtensions.BackgroundServices
 
                 await Task.Delay(_options.Value.TaskDelay, stoppingToken);
             }
-
-            throw new NotImplementedException();
         }
 
         protected void GetActualTask()
