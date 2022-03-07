@@ -12,11 +12,11 @@ IHost host = Host.CreateDefaultBuilder(args)
         services
         .AddLogging()
         .AddOptions<TaskSettings>().Bind(config.GetSection(TaskSettings.Settings));
-        
+
         services
         .AddCommonWorker()
-        .AddTestWorker()
-        .AddHostedService<Worker>();
+        .AddTestWorker();
+        //.AddHostedService<Worker>();
 
     })
     .UseWindowsService(options => {

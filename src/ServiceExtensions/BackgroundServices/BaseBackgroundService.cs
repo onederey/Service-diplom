@@ -1,5 +1,6 @@
 ﻿using CommonLib.Classes;
 using CommonLib.Interfaces;
+using CommonLib.Sql;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,6 +14,10 @@ namespace ServiceExtensions.BackgroundServices
         private readonly ITaskDataManager _taskDataManager;
         private readonly IMailManager _mailManager;
 
+        public abstract string BackgroundServiceName { get; set; }
+        public abstract ServiceTask ServiceTaskWork { get; set; }
+        public abstract string Branch { get; set; }
+
         protected BaseBackgroundService(
             ILogger<T> logger,
             IOptions<TaskSettings> options,
@@ -23,24 +28,26 @@ namespace ServiceExtensions.BackgroundServices
             _options = options;
             _taskDataManager = taskDataManager;
             _mailManager = mailManager;
+
+            InitConnString(_options.Value.ConnectionString);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("EGOR BARMALEI");
+                _logger.LogInformation($"       {BackgroundServiceName}");
                 var tasks = _taskDataManager.GetAllTasks();
-                //try
-                //{
-                //    GetActualTask();
-                //    if (NeedToExecute())
-                //        ExecuteAsyncInternal();
-                //}
-                //catch (Exception ex)
-                //{
-                //    _logger.LogCritical(ex.Message);
-                //}
+                try
+                {
+                    GetActualTask();
+                    if (NeedToExecute())
+                        ExecuteAsyncInternal();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogCritical(ex.Message);
+                }
 
                 await Task.Delay(_options.Value.TaskDelay, stoppingToken);
             }
@@ -50,7 +57,7 @@ namespace ServiceExtensions.BackgroundServices
 
         protected void GetActualTask()
         {
-            throw new NotImplementedException();
+            //var task = SqlHelper.ExecuteQuery
         }
 
         protected bool NeedToExecute()
@@ -61,6 +68,11 @@ namespace ServiceExtensions.BackgroundServices
         protected void ExecuteAsyncInternal()
         {
             throw new NotImplementedException();
+        }
+
+        private void InitConnString(string connectionString)
+        {
+            SqlHelper.ConnString = connectionString;
         }
     }
 }

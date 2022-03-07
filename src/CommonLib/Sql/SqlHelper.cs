@@ -1,5 +1,6 @@
 ﻿using CommonLib.Classes;
 using Dapper;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +16,7 @@ namespace CommonLib.Sql
     /// </summary>
     public static class SqlHelper
     {
-        public static string ConnString { get; set; } = "Data Source=.;Initial Catalog=dbBankGM;Integrated Security=true";
+        public static string ConnString { get; set; }
 
         public static IEnumerable<T> ExecuteQuery<T>(string sp)
         {

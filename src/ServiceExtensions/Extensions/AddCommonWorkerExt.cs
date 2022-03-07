@@ -16,8 +16,8 @@ namespace ServiceExtensions.Extensions
             }
 
             return collection
-                .AddTransient<ITaskDataManager, TaskDataManager>()
-                .AddTransient<IMailManager, MailManager>();
+                .AddSingleton<ITaskDataManager, TaskDataManager>()
+                .AddSingleton<IMailManager, MailManager>();
         }
     }
 }
