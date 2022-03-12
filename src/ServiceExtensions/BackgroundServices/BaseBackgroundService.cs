@@ -16,7 +16,7 @@ namespace ServiceExtensions.BackgroundServices
 
         public abstract string BackgroundServiceName { get; set; }
         public abstract ServiceTask ServiceTaskWork { get; set; }
-        public abstract string Branch { get; set; }
+        public abstract int Branch { get; set; }
 
         protected BaseBackgroundService(
             ILogger<T> logger,
@@ -36,8 +36,6 @@ namespace ServiceExtensions.BackgroundServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation($"       {BackgroundServiceName}");
-                var tasks = _taskDataManager.GetAllTasks();
                 try
                 {
                     GetActualTask();
@@ -55,17 +53,64 @@ namespace ServiceExtensions.BackgroundServices
 
         protected void GetActualTask()
         {
-            //var task = SqlHelper.ExecuteQuery
+            var tasks = SqlHelper.ExecuteQuery<ServiceTask>("[dbo].[Service_GetAllTasks]");
+            ServiceTaskWork = tasks.FirstOrDefault(task => task.TaskName == BackgroundServiceName && task.Branch == Branch);
+
+            if(ServiceTaskWork == null)
+            {
+                throw new InvalidOperationException($"{BackgroundServiceName}. Cannot find task related to worker name.");
+            }
         }
 
+        /// <summary>
+        /// Check dependencies, work time, last work time
+        /// </summary>
+        /// <returns></returns>
         protected bool NeedToExecute()
         {
-            throw new NotImplementedException();
+            if (ServiceTaskWork.IsEnabled)
+            {
+                if (ServiceTaskWork.LastWorkTime.HasValue && DateTime.Now.Date <= ServiceTaskWork.LastWorkTime.Value.Date)
+                {
+                    _logger.LogInformation($"{BackgroundServiceName}. Task already worked today.");
+                    return false;
+                }
+
+                if (ServiceTaskWork.TaskStartTime.TimeOfDay > DateTime.Now.TimeOfDay 
+                    || ServiceTaskWork.TaskEndTime.TimeOfDay < DateTime.Now.TimeOfDay)
+                {
+                    _logger.LogInformation($"{BackgroundServiceName}. Task is out from Start and End time settings.");
+                    return false;
+                }
+
+                if(!CheckDependencies())
+                {
+                    _logger.LogInformation($"{BackgroundServiceName}. Task dependency is not resolved.");
+                    return false;
+                }
+            }
+            else
+            {
+                _logger.LogInformation($"{BackgroundServiceName}. Task is not enabled.");
+                return false;
+            }
+
+            return true;
         }
 
         protected void ExecuteAsyncInternal()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Check field dependency of task.... TODO
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckDependencies()
+        {
+
+            return true;
         }
 
         private void InitConnString(string connectionString)

@@ -4,6 +4,7 @@ BEGIN
 	SELECT 
 		TaskID
 		,TaskType
+		,IsEnabled
 		,Branch
 		,TaskName
 		,Dependency
@@ -13,6 +14,7 @@ BEGIN
 		,FilePath
 		,FieldsCount
 		,FieldsSeparator
+		,Params
 	FROM
 		[dbo].[ServiceTasks]
 END
