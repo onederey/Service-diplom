@@ -34,5 +34,7 @@ namespace CommonLib.Classes
 		public string FieldsSeparator { get; set; } = "#";
 
 		public string Params { get; set; } = string.Empty;
+
+		public bool ManualStart { get; set; }
 	}
 }

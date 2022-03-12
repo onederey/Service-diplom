@@ -15,7 +15,8 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services
         .AddCommonWorker()
-        .AddTestWorker();
+        .AddTestWorker()
+        .AddTestFileWorker();
         //.AddHostedService<Worker>();
 
     })

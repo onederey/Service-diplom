@@ -14,5 +14,10 @@ namespace ServiceExtensions.BackgroundServices
         public TestBackgroundService(ILogger<TestBackgroundService> logger, IOptions<TaskSettings> options, ITaskDataManager taskDataManager, IMailManager mailManager) : base(logger, options, taskDataManager, mailManager)
         {
         }
+
+        protected override void ExecuteAsyncInternal()
+        {
+            //implement
+        }
     }
 }

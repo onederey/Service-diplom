@@ -15,6 +15,7 @@
     [ModifiedBy]      NVARCHAR (50)  NOT NULL,
     [AuthoriziedBy]   NVARCHAR (50)  NOT NULL,
     [Description]     NVARCHAR (250) NULL,
+    [ManualStart]     BIT            NOT NULL,
     PRIMARY KEY CLUSTERED ([TaskID] ASC),
     FOREIGN KEY ([Branch]) REFERENCES [dbo].[Branches] ([BranchCode]),
     FOREIGN KEY ([TaskType]) REFERENCES [dbo].[TaskTypes] ([Id])
