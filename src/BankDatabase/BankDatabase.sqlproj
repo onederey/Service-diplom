@@ -95,5 +95,9 @@
     <Build Include="Stored Procedures\sp_Delete_Errors.sql" />
     <Build Include="Stored Procedures\sp_Remove_Column.sql" />
     <Build Include="Stored Procedures\Service_GetAllTasks.sql" />
+    <Build Include="Tables\LogUser.sql" />
+    <Build Include="Tables\Events.sql" />
+    <Build Include="Tables\Users.sql" />
+    <Build Include="Tables\Reports.sql" />
   </ItemGroup>
 </Project>

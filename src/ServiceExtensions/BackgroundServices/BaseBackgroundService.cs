@@ -73,7 +73,9 @@ namespace ServiceExtensions.BackgroundServices
         protected void GetActualTask()
         {
             _serviceTasks = (ICollection<ServiceTask>)SqlHelper.ExecuteQuery<ServiceTask>("[dbo].[Service_GetAllTasks]");
+#pragma warning disable CS8601 // Possible null reference assignment.
             ServiceTaskWork = _serviceTasks?.FirstOrDefault(task => task.TaskName == BackgroundServiceName && task.Branch == Branch);
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             if (ServiceTaskWork == null)
                 throw new InvalidOperationException($"{BackgroundServiceName}. Cannot find task related to worker name.");
